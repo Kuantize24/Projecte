@@ -22,7 +22,7 @@
 		<script src="../../public/js/bootstrap/bootstrap.min.js"></script>
 
         <?php startblock('stylesheet') ?>
-        <!-- CSS  -->
+        <!-- CSS and JS  -->
         <?php endblock() ?>
 
         <link rel="stylesheet" type="text/css" href="../../public/css/default/layout.css">
@@ -60,10 +60,7 @@
                             </div>
                         </div>
                     </nav> 
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
+               
                     <?php startblock('principal') ?>
                         <!-- principal  -->
                     <?php endblock() ?>
