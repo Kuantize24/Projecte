@@ -25,7 +25,7 @@
         <!-- CSS and JS  -->
         <?php endblock() ?>
 
-        <link rel="stylesheet" type="text/css" href="../../public/css/default/layout.css">
+        <link rel="stylesheet" type="text/css" href="/resources/public/css/default/layout.css">
 
 	</head>
 	<body> 
