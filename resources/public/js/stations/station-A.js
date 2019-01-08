@@ -3,9 +3,8 @@ var myObstacles = [];
 var myScore;
 
 window.onload=function startGame(){
-    myGamePiece = new component(30, 30, "red", 280, 560);
+    myGamePiece = new component(30, 30, "blue", 280, 560);
     myGamePiece.gravity = 0.5;
-    myScore = new component("30px", "Consolas", "black", 100, 40, "text");
     myGameArea.start();
 }
 
@@ -15,7 +14,7 @@ var myGameArea = {
         this.canvas.width = 560;
         this.canvas.height = 720;
         this.context = this.canvas.getContext("2d");
-        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        document.body.appendChild(this.canvas);
         this.frameNo = 0;
         this.interval = setInterval(updateGameArea, 20);
         window.addEventListener('keydown', function (e) {
@@ -33,6 +32,10 @@ var myGameArea = {
 
 function component(width, height, color, x, y, type) {
     this.type = type;
+    if (type == "image") {
+        this.image = new Image();
+        this.image.src = color;
+      }
     this.score = 0;
     this.width = width;
     this.height = height;
@@ -40,14 +43,15 @@ function component(width, height, color, x, y, type) {
     this.speedY = 0;    
     this.x = x;
     this.y = y;
-    this.gravity = 0;
-    this.gravitySpeed = 0;
+    this.gravity = 100;
+    this.gravitySpeed = 100;
     this.update = function() {
         ctx = myGameArea.context;
-        if (this.type == "text") {
-            ctx.font = this.width + " " + this.height;
-            ctx.fillStyle = color;
-            ctx.fillText(this.text, this.x, this.y);
+        if (this.type == "image") {
+            ctx.drawImage(this.image, 
+                this.x, 
+                this.y,
+                this.width, this.height);
         } else {
             ctx.fillStyle = color;
             ctx.fillRect(this.x, this.y, this.width, this.height);
@@ -66,6 +70,15 @@ function component(width, height, color, x, y, type) {
             this.gravitySpeed = 0;
         }
     }
+        /*this.hitWall = function() {
+        var wall = myGameArea.canvas.widht - this.widht;
+        if (this.x > wall) {
+            this.x = wall;
+        }
+        else if (this.x < 0) {
+            this.x = 0;
+        } 
+    }*/
     this.crashWith = function(otherobj) {
         var myleft = this.x;
         var myright = this.x + (this.width);
@@ -84,7 +97,7 @@ function component(width, height, color, x, y, type) {
 }
 
 function updateGameArea() {
-    var y, widht, gap, minWidht, maxWidht, minGap, maxGap;
+    var  gap, minGap, maxGap;
     for (i = 0; i < myObstacles.length; i += 1) {
         if (myGamePiece.crashWith(myObstacles[i])) {
             return;
@@ -92,23 +105,26 @@ function updateGameArea() {
     }
     myGameArea.clear();
     myGameArea.frameNo += 1;
-    if (myGameArea.frameNo == 1 || everyinterval(150)) {
+    interval1 = 50;
+    interval2 = 40;
+    interval3 = 25;
+    if (myGameArea.frameNo == 1 || everyinterval(interval1) ||  everyinterval(interval2) || everyinterval(interval3)) {
         y = myGameArea.canvas.height;
-        minWidht = 20;
-        maxWidht = 200;
-        widht = Math.floor(Math.random()*(maxWidht-minWidht+1)+minWidht);
-        minGap = 50;
-        maxGap = 200;
+        minGap = 1;
+        maxGap = 270;
+        badLuck = Math.floor(Math.random() * 10) + 1; 
         gap = Math.floor(Math.random()*(maxGap-minGap+1)+minGap);
-        myObstacles.push(new component(widht, 10, "green", 0, 0));
-        myObstacles.push(new component(y-widht-gap, 10, "green", widht + gap, 0));
+        myObstacles.push(new component(20, 20, "black", gap, 0));
+        if (badLuck >3) {
+            myObstacles.push(new component(20, 20, "black", gap*2, 0));
+        }
+        
     }
     for (i = 0; i < myObstacles.length; i += 1) {
-        myObstacles[i].y += 1;
+        myObstacles[i].y += 10;
         myObstacles[i].update();
     }
-    myScore.text="SCORE: " + myGameArea.frameNo;
-    myScore.update();
+    
 
     myGamePiece.speedX = 0;
     myGamePiece.speedY = 0;    

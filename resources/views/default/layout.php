@@ -60,7 +60,6 @@
                             </div>
                         </div>
                     </nav> 
-               
                     <?php startblock('principal') ?>
                         <!-- principal  -->
                     <?php endblock() ?>
